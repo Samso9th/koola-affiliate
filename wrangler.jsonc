@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "koola-partner",
+  "compatibility_date": "2026-09-30",
+  "assets": { "directory": "./dist", "not_found_handling": "single-page-application" }
+}
