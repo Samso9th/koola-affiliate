@@ -1,4 +1,4 @@
-export interface Affiliate { id: string; name: string; email: string; phone: string; status: 'pending'|'active'|'suspended'; referral_code: string; commission_bps: number; commission_cap_bps: number; must_change_password: boolean; created_at: string }
+export interface Affiliate { id: string; name: string; email: string; phone: string; status: 'pending'|'active'|'suspended'; referral_code: string; commission_bps: number; commission_cap_bps: number; identity_status: 'unsubmitted'|'pending'|'verified'|'rejected'; identity_type: 'nin'|'bvn'|null; identity_last4: string|null; totp_enabled: boolean; has_password: boolean; google_linked: boolean; created_at: string }
 export interface Session { affiliate: Affiliate; accessToken: string }
 export interface Overview { affiliate: Affiliate; vendorLeads: number; referralLinkReady: boolean; earningsAvailable: boolean; payoutsAvailable: boolean }
 export interface Referral { id: string; name: string; city: string; created_at: string }
