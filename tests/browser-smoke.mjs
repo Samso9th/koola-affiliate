@@ -57,6 +57,22 @@ try {
   await page.getByRole('button', { name: 'Overview', exact: true }).click();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({ path: 'artifacts/partner-overview-mobile.png', fullPage: true });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.getByRole('button', { name: 'Sign out' }).click();
+  await page.getByLabel('Email address').fill('pending@example.test');
+  await page.getByLabel('Password', { exact: true }).fill(password);
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
+  await page.getByLabel('11-digit NIN').fill('12345678901');
+  await page.getByRole('button', { name: 'Submit for review' }).click();
+  await page.getByRole('heading', { name: 'Your details are in review.' }).waitFor();
+  assert.equal(await page.getByText("Cannot read properties of null").count(), 0);
+  const { database } = await import('../../api/dist/src/db.js');
+  const db = database(process.env.DATABASE_URL);
+  try { await db.Affiliate.update({ status: 'active', identity_status: 'verified', identity_ciphertext: null, identity_last4: '8901', identity_reviewed_at: new Date() }, { where: { email: 'pending@example.test' } }); }
+  finally { await db.db.close(); }
+  await page.getByRole('heading', { name: 'Your identity is verified.' }).waitFor({ timeout: 20000 });
+  await page.getByText('Your identity has been approved. Your partner code is ready.').waitFor();
   assert.deepEqual(errors, []);
-  console.log('PASS: registration UI, direct partner login, optional authenticator setup, real referral count and list, responsive widths 320/390/768/1440, no page errors.');
+  console.log('PASS: registration UI, direct partner login, NIN submission and automatic approval refresh, optional authenticator setup, real referral count and list, responsive widths 320/390/768/1440, no page errors.');
 } finally { await browser.close(); }

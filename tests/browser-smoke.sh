@@ -33,6 +33,7 @@ try {
   const id = randomUUID();
   const password = 'TemporaryPartnerPassword123!';
   await d.Affiliate.create({ id, name: 'Amina Yusuf', email: 'amina@example.test', phone: '+2348012345678', status: 'active', referral_code: 'K' + 'A'.repeat(24), commission_bps: 2500, commission_cap_bps: 4000, password_hash: await hashPassword(password), token_version: 0, identity_status: 'verified', identity_type: 'nin', identity_last4: '8901', created_at: new Date() });
+  await d.Affiliate.create({ id: randomUUID(), name: 'Pending Partner', email: 'pending@example.test', phone: '+2348031234567', status: 'pending', referral_code: 'K' + 'B'.repeat(24), commission_bps: 2500, commission_cap_bps: 4000, password_hash: await hashPassword(password), token_version: 0, identity_status: 'unsubmitted', created_at: new Date() });
   await d.Lead.create({ id: randomUUID(), name: 'Kano Kitchen', email: 'kitchen@example.test', phone: '+2348012345678', city: 'Kano', role: 'vendor', consent: true, affiliate_id: id, referral_code: 'K' + 'A'.repeat(24), created_at: new Date() });
   writeFileSync(process.env.SCRATCH_PASSWORD_FILE, password, { mode: 0o600 });
 } finally { await d.db.close(); }
